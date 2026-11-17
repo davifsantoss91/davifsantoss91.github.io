@@ -1,0 +1,88 @@
+Quero transformar este computador num estúdio de edição de vídeo com IA, pra editar meus Reels do mesmo jeito que um amigo meu edita: vídeo vertical falado, cortado sem nenhum silêncio, com legenda palavra por palavra, cards de interface animados, efeito sonoro em cada elemento que entra e trilha baixa por baixo. Eu não sei programar. Antes de cada etapa, me explica em uma frase simples o que você vai fazer, e espera eu dizer "pode" nas etapas marcadas com [APROVAÇÃO].
+
+REGRAS FIXAS
+- Trabalhe numa pasta chamada Edicao na minha pasta de usuário (fora de Documentos e da Mesa, que o iCloud sincroniza e trava o render). Se não existir, crie.
+- Se algum comando pedir a senha do meu Mac, me passe o comando pra eu colar no app Terminal; nunca digite senha.
+- Nunca gaste dinheiro sem me dizer quanto antes. Ferramenta paga (ElevenLabs, Gemini, IA de vídeo) só com o meu "pode" e o custo estimado.
+- Nunca imprima, copie nem salve chave de API fora do arquivo .env do próprio projeto. Quando precisar de uma chave, me peça pra colar.
+- Nunca publique nada. Eu reviso e posto.
+- Use vídeo de outras pessoas só como referência de estilo. Nunca copie marca, rosto, @ ou frases de ninguém.
+
+ETAPA 1. INSTALAR O ESTÚDIO
+1. Confira e instale o que faltar: Homebrew, Node.js 22 ou mais novo, FFmpeg, Python 3 com uv, e o whisper.cpp com o modelo small (transcrição grátis, roda no computador).
+2. Instale o HyperFrames (framework de vídeo em HTML, código aberto, da HeyGen: https://github.com/heygen-com/hyperframes) como plugin do Claude Code:
+   claude plugin marketplace add heygen-com/hyperframes
+   claude plugin install hyperframes@hyperframes
+   Se o plugin não funcionar, use as skills avulsas com: npx hyperframes skills update
+3. Instale a skill de corte por conversa, video-use (https://github.com/browser-use/video-use). Clone em ~/Developer/video-use e siga o install.md do próprio repositório. Ela usa ElevenLabs Scribe pra transcrever com o tempo de cada palavra: me pergunte se eu quero criar a conta (é paga por uso, centavos por vídeo) ou se vamos só com o whisper.cpp, que é grátis.
+4. Crie um projeto HyperFrames de teste vertical (1080x1920, 30 fps), faça um vídeo de 5 segundos com a palavra FUNCIONOU entrando com animação e renderize.
+5. Me mostre a lista do que foi instalado (✓ ou ✗) e abra o preview.
+Pronto quando: o vídeo de teste abre e mostra FUNCIONOU. Se as skills não aparecerem, me peça pra fechar e abrir o Claude de novo.
+
+ETAPA 2. MEU PERFIL [APROVAÇÃO]
+Me entreviste, UMA pergunta por vez: o que eu faço, pra quem eu falo, sobre o que são meus vídeos, como eu falo, minhas cores (cor de destaque e cor de ênfase), minhas fontes (uma de título pesada e uma de texto) e o que eu nunca mostro. Se eu não tiver cores e fontes, me proponha 2 opções e eu escolho. Salve em perfil.md, com as minhas palavras, sem inventar nada.
+
+ETAPA 3. MEU ESTILO DE EDIÇÃO
+Crie estilo.md juntando as regras abaixo com o meu perfil.md (troque "COR DE DESTAQUE", "COR DE ÊNFASE", "FONTE DE TÍTULO" e "FONTE DE TEXTO" pelas minhas). Esse arquivo é lido antes de toda edição e cresce a cada correção que eu aprovar.
+
+  ESTILO BASE
+  Ritmo
+  - Zero silêncio entre frases: quando eu termino de falar, já entra a próxima. Pausa no meio da frase maior que 0,22 s vira 0,1 s. Respiro de até 0,15 s pode ficar.
+  - Entra algo novo na tela a cada 3 a 5 segundos (card, palavra grande, contador, lista). Nunca dois elementos grandes ao mesmo tempo.
+  - Uma tomada longa é o padrão; o ritmo vem do que entra na tela, não do corte.
+  Layout
+  - Padrão alternado: painel de gráfico nos 40 a 45% de cima e eu num card de cantos arredondados embaixo quando houver explicação ou demonstração; tela cheia no gancho e nas frases fortes.
+  - Variações: eu recortado (sem fundo) no canto, sobre o tema do assunto; palavra gigante atrás de mim (recorte de pessoa por cima do texto).
+  - Nada importante no topo, na base e na lateral direita, que o Instagram cobre.
+  O vídeo explica com interface
+  - Sempre que eu citar uma ferramenta, um arquivo ou uma ação, ela entra como card de app recriado em HTML (chat, terminal, arquivo "bruto 5:53", caixa de comentário, notificação), nunca como print borrado.
+  - Etiqueta pequena "editado por IA" no canto de cima à esquerda; rótulo pequeno em caixa alta com uma bolinha antes ("• ANTES", "• HOJE").
+  - Título na FONTE DE TÍTULO com a palavra-chave na COR DE DESTAQUE; apoio menor na FONTE DE TEXTO.
+  - Cards com cantos de 16 a 24 px, borda fina, sombra macia.
+  - Quando eu der exemplos ("se eu fosse um dentista..."), cada exemplo ganha paleta e ilustração próprias no painel.
+  - O elemento nasce onde meu dedo aponta e acompanha minha mão (medir a posição da mão quadro a quadro, não chutar).
+  Motions
+  - Card entra com escala 0,9 → 1 e subida de 20 px em 0,35 a 0,4 s, passando um pouco do ponto. Crescer e deslizar são as entradas principais; desfoque quase nunca.
+  - Lista que monta em cascata, 0,15 a 0,25 s por item, com check desenhado.
+  - Digitação de 30 a 50 ms por letra, com cursor; cursor que clica em botão; carimbo que bate com leve tremor; seta e palavra "à mão" desenhadas; contador e antes → depois com números reais do vídeo.
+  Legenda
+  - Palavra por palavra, 1 a 3 por vez, FONTE DE TEXTO em negrito, branca, contorno ou sombra escura, sem caixa de fundo.
+  - Fica na altura do peito, dentro do meu card, sem cobrir o rosto nem o painel.
+  - COR DE ÊNFASE na palavra de mais carga emocional (no máximo uma a cada 2 ou 3 frases); COR DE DESTAQUE em nome de ferramenta e número que importa. Nunca três cores na mesma linha.
+  - Cada palavra entra com um pop curto.
+  Som
+  - Trilha instrumental (lo-fi ou eletrônica leve, uns 100 a 110 BPM) baixa e constante, abaixando onde eu falo.
+  - Um efeito por elemento que entra, uns 12 a 13 por minuto: whoosh em texto grande e troca de tema; pop em card, ícone e botão; digitação em prompt e comentário; clique em botão; ding em check; impacto só na frase mais forte (1 a 3 por vídeo); som digital em barra de progresso; notificação no fecho.
+  - Efeito sempre abaixo da voz. Volume final em -14 LUFS, pico abaixo de -1 dBTP.
+  Gancho e fecho
+  - Nos 2 primeiros segundos, estímulo visual mais som junto com a primeira frase (afirmação gigante, disputa "A ou B?", dor em pergunta, contador rodando).
+  - Fecho: a caixa de comentário digita a palavra do CTA, aparece o check, a notificação desce do topo e o card final traz a palavra grande. A palavra fica onde a minha fala indicar ("aqui embaixo" = embaixo).
+  IA de vídeo (trocar roupa ou cenário, objeto aparecendo)
+  - No máximo 1 ou 2 cenas por vídeo, só com o meu "pode" e o custo antes.
+
+Pronto quando: estilo.md tem as regras com as minhas cores e fontes no lugar.
+
+ETAPA 4. EDITAR UM VÍDEO MEU
+Eu vou gravar falando pra câmera; se eu errar uma frase, repito na hora sem parar a gravação. Quando eu soltar o arquivo na pasta, leia perfil.md e estilo.md e siga, parando nas aprovações:
+1. Se o vídeo for de iPhone em HDR (HLG), reduza pra 1080x1920 PRIMEIRO e depois converta pra SDR com tone map (zscale + tonemap mobius); nessa ordem, senão fica lento ou com cor lavada.
+2. Transcreva com o tempo de cada palavra. Onde eu repeti uma frase, escolha a melhor tomada e me mostre a escolha. [APROVAÇÃO]
+3. Meça no áudio onde a fala começa e termina (silencedetect) e corte com 0,03 s antes e 0,06 s depois da fala, com rampa de áudio de 30 ms em cada emenda. Recodifique o vídeo base com quadro-chave a cada 0,5 s (-g 15), senão o preview trava.
+4. Me mostre o plano segundo a segundo: gancho, o que entra na tela em cada frase, layout (card ou tela cheia), legenda e sons. [APROVAÇÃO]
+5. Faça o recorte da pessoa (remove-background do HyperFrames, qualidade best) pras palavras atrás de mim e pro layout recortado; meça o topo da cabeça no recorte pra enquadrar o card.
+6. Onde eu aponto ou mexo a mão pra mostrar algo, meça a posição da mão em quadros com grade de coordenadas e faça o elemento nascer ali e acompanhar a mão.
+7. Monte com o HyperFrames: um gerador em Python que escreve a composição a partir dos tempos reais das palavras (assim dá pra regerar quando eu corrigir algo). Trilha com carve sob a voz (skill hyperframes-audio).
+8. Rode lint e check. Se o check estourar o tempo, rode em faixas (--range 0,14 e assim por diante, com vírgula). Tire snapshots dos momentos-chave e confira com os olhos antes de me mostrar.
+9. Abra o preview pra eu revisar. [APROVAÇÃO]
+10. Eu vou falar o que mudar com o segundo exato. Corrija, e quando eu aprovar uma correção, salve a regra em estilo.md com a data e o porquê.
+11. Só depois do meu "pode renderizar": render em qualidade de entrega, depois ajuste o volume pra -14 LUFS com um limitador leve (teto -1,8 dBFS) mais ganho fixo, conferindo que o pico real ficou abaixo de -1 dBTP. Confira 10 quadros do arquivo final contra o preview.
+Pronto quando: o MP4 final está na pasta, conferido, e eu aprovei.
+
+ARMADILHAS JÁ CONHECIDAS (evite)
+- Elemento interno com o mesmo id do contêiner da cena faz a cena inteira sumir; o gerador deve parar com erro se isso acontecer.
+- O carve do hyperframes-audio pode gravar o atributo data-automation duplicado; junte as faixas num atributo só antes do lint.
+- Música com carve some se o volume ficar baixo demais; comece em torno de 0,55 e ajuste ouvindo.
+- Contador que acompanha a mão deve usar o ponto mais alto já alcançado, pra só subir.
+- Legenda nunca em cima do card de interface ou do rosto.
+
+RELATÓRIO NO FIM DE CADA ETAPA
+O que foi feito, o que ficou pendente, quanto foi gasto (se algo foi pago) e o próximo passo.
